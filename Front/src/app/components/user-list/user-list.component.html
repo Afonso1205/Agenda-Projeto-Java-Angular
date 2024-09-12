@@ -1,0 +1,100 @@
+<div class="flex flex-col flex-1 w-full gap-2 py-4">
+    <div *ngFor="let user of filteredUsers" class="flex">
+        <ng-container *ngIf="user.id != undefined && user.id != null">
+            <ng-container *ngIf="filteredUsers?.length == 0">
+                <span>Nenhum resultado encontrado</span>
+            </ng-container>
+
+            <label *ngIf="isSelectMultipleOn && isSelected(user.id)" [for]="'checkbox-' + user.id"
+                class="relative flex items-center justify-start h-auto max-w-lg gap-4 p-2 duration-300 bg-blue-900 rounded-l-sm hover:bg-slate-800"
+                [ngClass]="{ 'bg-slate-800': user.selected }">
+                <svg class="fill-zinc-200"
+                    *ngIf="isSelectMultipleOn == true ? isSelected(user.id) : selectedUsers.id === user.id"
+                    xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="" viewBox="0 0 256 256">
+                    <path
+                        d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z">
+                    </path>
+                </svg>
+                <input type="checkbox" id="checkbox-{{ user.id }}" [(ngModel)]="user.selected" class="hidden"
+                    (change)="handleUserSelectionChange(user)">
+            </label>
+
+            <button (mouseover)="handleUserMouseOver(user.initial)" (mouseleave)="handleUserMouseLeave(user.initial)"
+                (click)="handleUserCardClick(user.initial, user.id)" id="user-{{ user.id }}"
+                class="flex items-center justify-start w-full h-auto gap-4 p-2 duration-300 bg-transparent rounded-sm hover:bg-slate-800"
+                [ngClass]="{'!bg-slate-800 ': isSelectMultipleOn == true ? isSelected(user.id) : selectedUsers?.id === user?.id}">
+
+                <div [ngClass]="letterColors[(user.initial)]"
+                    class="flex items-center justify-center rounded-sm selectedLetter h-9 aspect-square">
+                    {{ user.initial }}
+                </div>
+
+                <span class="w-[1px] min-h-8 bg-zinc-600"></span>
+                
+                <div class="flex items-start justify-start w-full gap-2 ">
+
+                    <img *ngIf="user.image != ''" [src]="user.image" [alt]="user.name" class="w-12 rounded-full">
+
+                    <div [ngClass]="user.theme" *ngIf="user.image === ''"
+                        class="flex items-center justify-center h-12 rounded-full min-w-12">
+                        <span>{{user.initial}}</span>
+                    </div>
+
+                    <div class="flex flex-col items-start w-full max-w-56">
+                        <div class="flex items-center justify-between w-full gap-2">
+                            <div class="w-full max-w-xs text-lg font-semibold truncate text-start">{{ user.name }}</div>
+                        </div>
+                        <div class="font-normal text-indigo-300">{{ user.phone }}</div>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center justify-start w-full gap-1 overflow-hidden">
+                        <div *ngFor="let category of user.categories" [ngClass]="category.color"
+                            class="px-1 rounded">
+                            <span>{{category.name}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a [routerLink]="['/', user.id]" *ngIf="!isSelectMultipleOn" class="flex items-center justify-center w-6 h-6 p-[2px] rounded-sm bg-slate-700">
+                    <svg class="fill-zinc-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill=""
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M189.66,122.34a8,8,0,0,1,0,11.32l-72,72a8,8,0,0,1-11.32-11.32L164.69,136H32a8,8,0,0,1,0-16H164.69L106.34,61.66a8,8,0,0,1,11.32-11.32ZM216,32a8,8,0,0,0-8,8V216a8,8,0,0,0,16,0V40A8,8,0,0,0,216,32Z">
+                        </path>
+                    </svg>
+                </a>
+            </button>
+
+        </ng-container>
+    </div>
+</div>
+
+<div class="sticky flex items-center justify-between pr-8 top-24">
+    <div class="flex items-center justify-end flex-1 gap-4 fill-zinc-200">
+        <a (click)="toggleSelectMultiple()" class="duration-300 hover:opacity-50"
+            [ngClass]="isSelectMultipleOn ? 'bg-slate-700 rounded-sm fill-zinc-400 ' : 'fill-zinc-200'"
+            title="Selecionar múltiplos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="" viewBox="0 0 256 256">
+                <path
+                    d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z">
+                </path>
+            </svg>
+        </a>
+
+        <a routerLink="/add-contact" class="duration-300 hover:opacity-50 fill-zinc-200" title="Adidiconar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+                <path
+                    d="M256,136a8,8,0,0,1-8,8H232v16a8,8,0,0,1-16,0V144H200a8,8,0,0,1,0-16h16V112a8,8,0,0,1,16,0v16h16A8,8,0,0,1,256,136Zm-57.87,58.85a8,8,0,0,1-12.26,10.3C165.75,181.19,138.09,168,108,168s-57.75,13.19-77.87,37.15a8,8,0,0,1-12.25-10.3c14.94-17.78,33.52-30.41,54.17-37.17a68,68,0,1,1,71.9,0C164.6,164.44,183.18,177.07,198.13,194.85ZM108,152a52,52,0,1,0-52-52A52.06,52.06,0,0,0,108,152Z">
+                </path>
+            </svg>
+        </a>
+
+        <a class="duration-300 hover:opacity-50" title="Excluir" (click)="handleUserDeletion()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+                <path
+                    d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z">
+                </path>
+            </svg>
+        </a>
+    </div>
+</div>

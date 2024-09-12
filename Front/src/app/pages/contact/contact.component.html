@@ -1,0 +1,175 @@
+<app-header [isHome]="false"></app-header>
+
+<div
+    class="flex max-w-screen-md flex-col text-sm items-center justify-start gap-8 w-full mx-auto my-8 !placeholder:text-zinc-400 min-h-[calc(100vh-12rem)]">
+    <div class="flex flex-col w-full gap-4">
+        <div
+            class="flex text-zinc-200 max-w-screen-md flex-col text-sm items-center justify-start gap-8 w-full mx-auto my-8 !placeholder:text-zinc-400">
+            <form class="flex flex-col w-full gap-4">
+                <div class="flex w-full">
+                    <div class="flex w-full gap-1 p-4 rounded-lg bg-slate-800">
+                        <!-- imagem -->
+                        <div class="flex items-center gap-4">
+                            <img *ngIf="user.image != ''" [src]="user.image" [alt]="user.name"
+                                class="rounded-full w-22">
+
+                            <div [ngClass]="user.theme" *ngIf="user.image === ''"
+                                class="flex items-center justify-center h-12 rounded-full min-w-12">
+                                <span>{{user.initial}}</span>
+                            </div>
+                        </div>
+
+                        <!-- Informação pessoal -->
+                        <div class="flex flex-col w-full gap-1 p-4 rounded-lg bg-slate-800">
+                            <h2 class="mb-2 text-lg font-bold">Informações Pessoais</h2>
+
+                            <div class="flex gap-2">
+                                <span class="font-semibold whitespace-nowrap">Nome completo:</span>
+
+                                <input [disabled]="!isEditing" [(ngModel)]="user.name" name="name"
+                                    class="w-1/3 border rounded " [ngClass]="{
+                                    'bg-transparent px-0 border-none': !isEditing,
+                                    'bg-slate-900 px-2 border-slate-900': isEditing
+                                }" />
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="font-semibold whitespace-nowrap">Data de Nascimento:</span>
+
+                                <input [disabled]="!isEditing" [(ngModel)]="user.birthdate" name="birthdate"
+                                    class="w-1/3 border rounded " [ngClass]="{
+                                    'bg-transparent px-0 border-none': !isEditing,
+                                    'bg-slate-900 px-2 border-slate-900': isEditing
+                                }" />
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="font-semibold whitespace-nowrap">Telefone:</span>
+
+                                <input [disabled]="!isEditing" [(ngModel)]="user.phone" name="phone"
+                                    class="w-1/3 border rounded " [ngClass]="{
+                                'bg-transparent px-0 border-none': !isEditing,
+                                'bg-slate-900 px-2 border-slate-900': isEditing
+                            }" />
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="font-semibold whitespace-nowrap">Email:</span>
+
+                                <input [disabled]="!isEditing" [(ngModel)]="user.email" name="email"
+                                    class="w-1/3 border rounded " [ngClass]="{
+                                'bg-transparent px-0 border-none': !isEditing,
+                                'bg-slate-900 px-2 border-slate-900': isEditing
+                            }" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-lg shadow-md bg-slate-800">
+                    <h2 class="mb-2 text-lg font-bold">Endereços</h2>
+                    <div class="flex flex-col gap-4">
+                        <ng-container *ngFor="let address of user.addresses;" class="flex gap-0">
+                            <div class="flex items-center w-full gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 10a2 2 0 114 0 2 2 0 01-4 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+
+                                <div class="flex gap-2">
+                                    <div class="font-semibold">
+                                        <input [disabled]="!isEditing" [(ngModel)]="address.street"
+                                            name="street_{{address.id}}" class="border rounded w-36" [ngClass]="{
+                                                'bg-transparent px-0 border-none': !isEditing,
+                                                'bg-slate-900 px-2 border-slate-900': isEditing
+                                            }" />
+                                    </div>
+                                    <div class="font-semibold">
+                                        <input [disabled]="!isEditing" *ngIf="isEditing" [(ngModel)]="address.state"
+                                            name="state_{{address.id}}" class="w-12 border rounded" [ngClass]="{
+                                                'bg-transparent px-0 border-none': !isEditing,
+                                                'bg-slate-900 px-2 border-slate-900': isEditing
+                                            }" />
+                                        <span *ngIf="!isEditing">{{address.state}}</span>
+                                    </div>
+                                    <div class="font-semibold">
+                                        <input [disabled]="!isEditing" *ngIf="isEditing" [(ngModel)]="address.city"
+                                            name="city_{{address.id}}" class="w-32 border rounded" [ngClass]="{
+                                                'bg-transparent px-0 border-none': !isEditing,
+                                                'bg-slate-900 px-2 border-slate-900': isEditing
+                                            }" />
+                                        <span *ngIf="!isEditing">{{address.city}}</span>
+                                    </div>
+                                    <div class="font-semibold">
+                                        <input [disabled]="!isEditing" *ngIf="isEditing" [(ngModel)]="address.country"
+                                            name="country_{{address.id}}" class="w-16 border rounded" [ngClass]="{
+                                                'bg-transparent px-0 border-none': !isEditing,
+                                                'bg-slate-900 px-2 border-slate-900': isEditing
+                                            }" />
+                                        <span *ngIf="!isEditing">{{address.country}}</span>
+                                    </div>
+                                    <div class="font-semibold">
+                                        <input [disabled]="!isEditing" *ngIf="isEditing" [(ngModel)]="address.zip"
+                                            name="zip_{{address.id}}" class="w-24 border rounded" [ngClass]="{
+                                                'bg-transparent px-0 border-none': !isEditing,
+                                                'bg-slate-900 px-2 border-slate-900': isEditing
+                                            }" />
+                                        <span *ngIf="!isEditing">{{address.zip}}</span>
+                                    </div>
+                                    <button (click)="removeAddress(address.id)" *ngIf="isEditing" class="px-2 bg-red-900 rounded-sm">
+                                        Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div *ngIf="isEditing"
+                        class="relative flex items-center justify-start w-full mt-3 border-zinc-600 fill-zinc-400 group">
+                        <button (click)="addNewAddress()"
+                            class="w-auto px-2 py-1 text-white duration-300 bg-blue-900 rounded hover:bg-blue-600">Adicionar novo</button>
+                    </div>
+                    
+                </div>
+
+                <div class="p-4 rounded-lg shadow-md bg-slate-800">
+                    <h2 class="mb-2 text-lg font-bold">Categorias</h2>
+                    <div class="flex space-x-4">
+                        <ng-container *ngFor="let category of user.categories">
+                            <div draggable="true" (dragstart)="onDragStartCategory($event, category.id)"
+                                (dragend)="onDragEndCategory($event)"
+                                class="flex items-center px-2 py-1 text-white rounded-lg cursor-pointer"
+                                [ngClass]="category.color">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 10a2 2 0 114 0 2 2 0 01-4 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                {{ category.name }}
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div *ngIf="isEditing"
+                        class="relative flex items-center justify-end w-full border-b border-zinc-600 fill-zinc-400 group">
+                        <input type="text" id="categories" name="name" [(ngModel)]="newCategoryName"
+                            class="w-full h-10 px-2 transition-colors duration-300 bg-transparent rounded-lg text-zinc-200 focus:outline-none focus:group-fill-zinc-200"
+                            placeholder="Nova Categoria">
+                        <button (click)="addNewCategory()"
+                            class="w-auto px-2 py-1 text-white duration-300 bg-blue-900 rounded hover:bg-blue-600">Adicionar</button>
+                    </div>
+
+                    <div *ngIf="isEditing"
+                        class="flex items-center justify-center h-24 mt-4 border-2 border-dashed rounded-sm border-slate-600"
+                        (drop)="onDropCategory($event)" (dragover)="onDragOverCategory($event)">
+                        Arraste aqui para excluir
+                    </div>
+                </div>
+
+                <button type="button" (click)="toggleEdit()"
+                    class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
+                    {{isEditing ? 'Salvar' : 'Editar'}}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

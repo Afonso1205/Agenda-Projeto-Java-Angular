@@ -1,0 +1,48 @@
+<div class="flex flex-wrap items-center justify-start gap-2">
+    <button *ngFor="let letter of letters; let i = index"
+        class="flex items-center justify-center transition-all duration-300 rounded-md min-w-6 min-h-6 bg-slate-800 hover:bg-blue-600"
+        [ngClass]="{' !bg-blue-600': letter.isActive || letter.letter === selectedLetter}"
+        (click)="handleSideNavigation(letter.letter)">
+        <span class="flex items-center justify-center w-full h-full text-sm">
+            {{ letter.letter }}
+        </span>
+    </button>
+</div>
+
+<div class="flex flex-col gap-2 mt-8">
+    <div class="flex items-center justify-between">
+        <span class="text-base text-zinc-200">Categorias</span>
+        <button (click)="handleEditCategory()" class="p-1 duration-300 rounded-md hover:opacity-80 bg-slate-800">
+            <svg class="fill-zinc-200" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill=""
+                viewBox="0 0 256 256">
+                <path
+                    d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31l83.67-83.66,3.48,13.9-36.8,36.79a8,8,0,0,0,11.31,11.32l40-40a8,8,0,0,0,2.11-7.6l-6.9-27.61L227.32,96A16,16,0,0,0,227.32,73.37ZM48,179.31,76.69,208H48Zm48,25.38L51.31,160,136,75.31,180.69,120Zm96-96L147.32,64l24-24L216,84.69Z">
+                </path>
+            </svg>
+        </button>
+    </div>
+    <div class="flex flex-wrap gap-2">
+        <button (click)="handleCategoryClick(item.id)" class="flex" *ngFor="let item of categories; let i = index"
+            class="flex items-center justify-center px-2 py-1 text-xs font-semibold duration-300 border-2 border-transparent border-dashed rounded-sm border-spacing-5 text-zinc-200 hover:opacity-75 "
+            [ngClass]="[item.color, isIncluded(item.id)]" draggable="true" (dragstart)="onDragStart($event, item.id)"
+            (dragend)="onDragEnd($event)
+            ">
+            {{ item.name }}
+        </button>
+    </div>
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <div *ngIf="isEditMode"
+            class="relative flex items-center justify-end w-full border-b border-zinc-600 fill-zinc-400 group">
+            <input type="text" id="categories" name="name" formControlName="name"
+                class="w-full h-10 px-2 transition-colors duration-300 bg-transparent rounded-lg text-zinc-200 focus:outline-none focus:group-fill-zinc-200"
+                placeholder="Nova Categoria">
+            <button type="submit"
+                class="w-auto px-2 py-1 text-white duration-300 bg-blue-900 rounded hover:bg-blue-600">Adicionar</button>
+        </div>
+    </form>
+    <div *ngIf="isEditMode"
+        class="flex items-center justify-center h-24 mt-4 border-2 border-dashed rounded-sm border-slate-800"
+        (drop)="onDrop($event)" (dragover)="onDragOver($event)">
+        Arraste aqui para excluir
+    </div>
+</div>

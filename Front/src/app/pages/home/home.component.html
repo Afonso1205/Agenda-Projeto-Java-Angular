@@ -1,0 +1,21 @@
+<app-header [isHome]="true" (searchEvent)="handleSearch($event)"></app-header>
+
+<div *ngIf="!loading && users != undefined && filteredUsers != undefined"
+    class="flex items-start w-full max-w-screen-xl gap-8 p-2 mx-auto text-sm text-zinc-200">
+    
+    <div class="flex flex-col flex-1 w-full border-r border-slate-800">
+        <app-user-list class="flex items-start justify-start flex-1 w-full gap-4" [users]="users"
+            (deleteUsersEvent)="removeContact($event.users)"
+            [filteredUsers]="filteredUsers" [categories]="categories" [selectedUsers]="selectedUsers"
+            [letterColors]="letterColors" (userSelectionChange)="handleUserSelectionChange($event.user)"
+            (userMouseOver)="handleUserMouseOver($event)" (userMouseLeave)="handleUserMouseLeave($event)"
+            (selectMultipleEvent)="onIsSelectMultipleChanged($event)"
+            [isSelectMultipleOn]="isSelectMultipleOn" (userCardClick)="handleUserCardClick($event.initial, $event.id)">
+        </app-user-list>
+    </div>
+
+    <app-side-navigation class="sticky z-10 flex flex-col gap-2 top-24 max-w-80" [categories]="categories"
+        (categoryClick)="handleCategoryClick($event)" [selectedCategories]="selectedCategories" [letters]="letters"
+        [selectedLetter]="selectedLetter" (sideNavigationClick)="handleSideNavigation($event)">
+    </app-side-navigation>
+</div>
